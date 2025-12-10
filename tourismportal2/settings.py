@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',  #添加创建的app
+    'attractionsApp',  #添加创建的app
+    'homeApp',
+    'bookingApp',
+    'favoritesApp',
+    'tripPlanApp'
 ]
 
 MIDDLEWARE = [
