@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 1. 动态标题：子页面可以修改标题 -->
+    <title>{% block title %}广东旅游门户网{% endblock %}</title>
+    
+    <!-- 2. 引入 Bootstrap 5 CSS (使用CDN，确保电脑联网) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- 自定义 CSS (如果以后有的话) -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- ================= 3. 导航栏 (Navbar) ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href=" ">🏖️ 广东旅游</a >
+            
+            <!-- 手机端汉堡菜单按钮 -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- 首页 -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">首页</a >
+                    </li>
+
+                    <!-- 景点大全 (下拉菜单) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            景点导览
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/attractions/">全部景点</a ></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <!-- 这里利用 GET 参数进行筛选 -->
+                            <li><a class="dropdown-item" href="/attractions/?region=yue_nan">粤南风光</a ></li>
+                            <li><a class="dropdown-item" href="/attractions/?region=yue_bei">粤北名胜</a ></li>
+                            <li><a class="dropdown-item" href="/attractions/?region=yue_xi">粤西古迹</a ></li>
+                            <li><a class="dropdown-item" href="/attractions/?region=yue_dong">粤东海韵</a ></li>
+                            <li><a class="dropdown-item" href="/attractions/?region=gang_ao">港澳特区</a ></li>
+                        </ul>
+                    </li>
+
+                    <!-- 其他功能模块 -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/tripPlanApp/">旅游攻略</a >
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bookingApp/">我的订单</a >
+                    </li>
+                </ul>
+
+                <!-- 右侧登录注册区域 -->
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text text-white me-3">
+                            欢迎, {{ user.username }}
+                        </span>
+                        <a href="/logout/" class="btn btn-outline-light btn-sm">退出</a >
+                    {% else %}
+                        <a href="/login/" class="btn btn-outline-light btn-sm me-2">登录</a >
+                        <a href="/register/" class="btn btn-light btn-sm">注册</a >
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= 4. 主要内容区域 (挖坑) ================= -->
+    <!-- 所有的子页面内容都会填充到这里 -->
+    <div class="container mt-4 mb-5" style="min-height: 60vh;">
+        <!-- 显示Django的消息提示 (如: 登录成功、购买成功) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- ⚠️ 核心：子页面填坑的地方 -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- ================= 5. 页脚 (Footer) ================= -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 广东旅游门户网 | Python Web 期末大作业</p >
+        </div>
+    </footer>
+
+    <!-- 6. 引入 Bootstrap JS (用于下拉菜单等交互) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 自定义 JS -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

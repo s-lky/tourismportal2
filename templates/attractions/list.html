@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        {% for item in attractions %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- 核心代码在这里 -->
+                <!-- item.image 是文件对象，item.image.url 才是访问路径 -->
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <!-- 如果没传图，显示一个默认占位图 -->
+                    <div class="text-center p-5 bg-light">暂无图片</div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text text-danger">￥{{ item.price }}</p >
+                    <p class="card-text">{{ item.description|truncatechars:50 }}</p >
+                    <a href=" " class="btn btn-primary">查看详情</a >
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
