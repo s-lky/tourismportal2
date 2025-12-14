@@ -16,18 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-from homeApp.views import home
+from homeApp.views import home, user_login, user_register, user_logout
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home,name='home'),
+    path('', home, name='home'),
+    path('login/', user_login, name='login'),
+    path('register/', user_register, name='register'),
+    path('logout/', user_logout, name='logout'),
+    path('attractionsApp/', include('attractionsApp.urls')),
     path('bookingApp/', include('bookingApp.urls')),
     path('favoritesApp/', include('favoritesApp.urls')),
-    path('attractionsApp/', include('attractionsApp.urls')),
     path('tripPlanApp/', include('tripPlanApp.urls')),
-
 ]
 #让Django在开发模式可以找到在后台上传的图片
 if settings.DEBUG:

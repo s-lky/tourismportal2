@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}我的订单{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">我的订单</h2>
+    
+    {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>订单编号</th>
+                        <th>景点名称</th>
+                        <th>游玩日期</th>
+                        <th>票数</th>
+                        <th>单价</th>
+                        <th>总价</th>
+                        <th>状态</th>
+                        <th>预订时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+                        <td>{{ booking.attraction.name }}</td>
+                        <td>{{ booking.visit_date|date:"Y-m-d" }}</td>
+                        <td>{{ booking.quantity }} 张</td>
+                        <td>￥{{ booking.attraction.price }}</td>
+                        <td class="text-danger fw-bold">￥{{ booking.total_price }}</td>
+                        <td>
+                            {% if booking.status == 'paid' %}
+                                <span class="badge bg-success">已支付</span>
+                            {% elif booking.status == 'pending' %}
+                                <span class="badge bg-warning">待支付</span>
+                            {% else %}
+                                <span class="badge bg-secondary">已取消</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ booking.created_at|date:"Y-m-d H:i" }}</td>
+                        <td>
+                            <a href="{% url 'bookingApp:booking_detail' booking.id %}" class="btn btn-sm btn-outline-primary">查看详情</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">您还没有任何订单，<a href="{% url 'attractionsApp:attraction_list' %}">去看看景点吧</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

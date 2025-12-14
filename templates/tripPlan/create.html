@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}发布攻略{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">发布旅游攻略</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-danger small">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.days.id_for_label }}" class="form-label">{{ form.days.label }}</label>
+                            {{ form.days }}
+                            {% if form.days.errors %}
+                                <div class="text-danger small">{{ form.days.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">建议游玩天数（1-30天）</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.content.id_for_label }}" class="form-label">{{ form.content.label }}</label>
+                            {{ form.content }}
+                            {% if form.content.errors %}
+                                <div class="text-danger small">{{ form.content.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">可以包含路线规划、景点推荐、住宿建议、美食推荐等内容</small>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">发布攻略</button>
+                            <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-outline-secondary">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

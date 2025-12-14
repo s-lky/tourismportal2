@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}旅游攻略{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>旅游攻略</h2>
+        {% if user.is_authenticated %}
+            <a href="{% url 'tripPlanApp:create_trip_plan' %}" class="btn btn-primary">发布攻略</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">登录后发布攻略</a>
+        {% endif %}
+    </div>
+    
+    {% if trip_plans %}
+        <div class="row">
+            {% for plan in trip_plans %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plan.title }}</h5>
+                        <p class="text-muted">
+                            <small>发布者：{{ plan.user.username }} | {{ plan.days }}天 | {{ plan.created_at|date:"Y-m-d" }}</small>
+                        </p>
+                        <p class="card-text">{{ plan.content|truncatewords:50 }}</p>
+                        <a href="{% url 'tripPlanApp:trip_plan_detail' plan.id %}" class="btn btn-outline-primary">查看详情</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">暂无攻略，<a href="{% url 'tripPlanApp:create_trip_plan' %}">成为第一个发布攻略的人吧</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

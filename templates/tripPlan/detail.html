@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ plan.title }} - 旅游攻略{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">{{ plan.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 text-muted">
+                        <small>
+                            <strong>发布者：</strong>{{ plan.user.username }} | 
+                            <strong>建议游玩天数：</strong>{{ plan.days }}天 | 
+                            <strong>发布时间：</strong>{{ plan.created_at|date:"Y年m月d日 H:i" }}
+                            {% if plan.updated_at != plan.created_at %}
+                                | <strong>更新时间：</strong>{{ plan.updated_at|date:"Y年m月d日 H:i" }}
+                            {% endif %}
+                        </small>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="trip-content">
+                        {{ plan.content|linebreaks }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-outline-secondary">返回攻略列表</a>
+                        {% if user == plan.user %}
+                            <span class="text-muted">这是您发布的攻略</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

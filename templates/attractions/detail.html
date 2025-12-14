@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ attraction.name }} - 景点详情{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- 左侧：景点图片和基本信息 -->
+        <div class="col-md-6">
+            {% if attraction.image %}
+                <img src="{{ attraction.image.url }}" class="img-fluid rounded shadow" alt="{{ attraction.name }}">
+            {% else %}
+                <div class="text-center p-5 bg-light rounded">暂无图片</div>
+            {% endif %}
+        </div>
+        
+        <!-- 右侧：详情信息 -->
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ attraction.name }}</h2>
+            <p class="text-muted mb-3">
+                <span class="badge bg-primary">{{ attraction.get_region_display }}</span>
+            </p>
+            
+            <div class="mb-4">
+                <h3 class="text-danger mb-2">￥{{ attraction.price }} <small class="text-muted">起</small></h3>
+            </div>
+            
+            <div class="mb-4">
+                <h4>景点介绍</h4>
+                <p class="text-muted">{{ attraction.description }}</p>
+            </div>
+            
+            <!-- 预订按钮 -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'bookingApp:create_booking' attraction.id %}" class="btn btn-primary btn-lg w-100 mb-3">
+                    立即预订
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg w-100 mb-3">
+                    登录后预订
+                </a>
+            {% endif %}
+            
+            <!-- 收藏按钮 -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'favoritesApp:toggle_favorite' attraction.id %}" class="btn btn-outline-danger w-100">
+                    {% if is_favorited %}
+                        ❤️ 已收藏
+                    {% else %}
+                        🤍 收藏
+                    {% endif %}
+                </a>
+            {% endif %}
+            
+            <a href="{% url 'attractionsApp:attraction_list' %}" class="btn btn-outline-secondary w-100 mt-2">
+                返回景点列表
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

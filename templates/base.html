@@ -17,7 +17,7 @@
     <!-- ================= 3. 导航栏 (Navbar) ================= -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href=" ">🏖️ 广东旅游</a >
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">🏖️ 广东旅游</a >
             
             <!-- 手机端汉堡菜单按钮 -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -37,24 +37,29 @@
                             景点导览
                         </a >
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/attractions/">全部景点</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}">全部景点</a ></li>
                             <li><hr class="dropdown-divider"></li>
                             <!-- 这里利用 GET 参数进行筛选 -->
-                            <li><a class="dropdown-item" href="/attractions/?region=yue_nan">粤南风光</a ></li>
-                            <li><a class="dropdown-item" href="/attractions/?region=yue_bei">粤北名胜</a ></li>
-                            <li><a class="dropdown-item" href="/attractions/?region=yue_xi">粤西古迹</a ></li>
-                            <li><a class="dropdown-item" href="/attractions/?region=yue_dong">粤东海韵</a ></li>
-                            <li><a class="dropdown-item" href="/attractions/?region=gang_ao">港澳特区</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_nan">粤南风光</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_bei">粤北名胜</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_xi">粤西古迹</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_dong">粤东海韵</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=gang_ao">港澳特区</a ></li>
                         </ul>
                     </li>
 
                     <!-- 其他功能模块 -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/tripPlanApp/">旅游攻略</a >
+                        <a class="nav-link" href="{% url 'tripPlanApp:trip_plan_list' %}">旅游攻略</a >
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/bookingApp/">我的订单</a >
+                        <a class="nav-link" href="{% url 'bookingApp:my_bookings' %}">我的订单</a >
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'favoritesApp:my_favorites' %}">我的收藏</a >
+                    </li>
+                    {% endif %}
                 </ul>
 
                 <!-- 右侧登录注册区域 -->
@@ -63,7 +68,7 @@
                         <span class="navbar-text text-white me-3">
                             欢迎, {{ user.username }}
                         </span>
-                        <a href="/logout/" class="btn btn-outline-light btn-sm">退出</a >
+                        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">退出</a >
                     {% else %}
                         <a href="/login/" class="btn btn-outline-light btn-sm me-2">登录</a >
                         <a href="/register/" class="btn btn-light btn-sm">注册</a >
@@ -104,4 +109,5 @@
     <!-- 自定义 JS -->
     {% block extra_js %}{% endblock %}
 </body>
+</html>
 </html>

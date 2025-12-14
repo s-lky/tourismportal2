@@ -4,7 +4,7 @@ from . import views
 app_name = 'bookingApp'
 
 urlpatterns = [
-    path('func1',views.func1,name = 'func1'),    #booking的二级网页功能1
-    path('func2',views.func2,name = 'func2'),    #booking的二级网页功能2
-
+    path('create/<int:attraction_id>/', views.create_booking, name='create_booking'),  # 创建预订
+    path('my_bookings/', views.my_bookings, name='my_bookings'),  # 我的订单
+    path('detail/<int:booking_id>/', views.booking_detail, name='booking_detail'),  # 订单详情
 ]

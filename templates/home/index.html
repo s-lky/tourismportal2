@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}首页 - 广东旅游门户网{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- 欢迎横幅 -->
+    <div class="jumbotron bg-primary text-white rounded p-5 mb-5">
+        <h1 class="display-4">🏖️ 欢迎来到广东旅游门户网</h1>
+        <p class="lead">探索广东最美的风景，体验最精彩的旅程</p>
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.3);">
+        <p>发现粤南、粤北、粤西、粤东及港澳特区的独特魅力</p>
+        <a class="btn btn-light btn-lg" href="{% url 'attractionsApp:attraction_list' %}" role="button">开始探索</a>
+    </div>
+    
+    <!-- 推荐景点 -->
+    <h2 class="mb-4">推荐景点</h2>
+    <div class="row">
+        {% for attraction in featured_attractions %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if attraction.image %}
+                    <img src="{{ attraction.image.url }}" class="card-img-top" alt="{{ attraction.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="text-center p-5 bg-light">暂无图片</div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ attraction.name }}</h5>
+                    <p class="text-muted">{{ attraction.get_region_display }}</p>
+                    <p class="card-text text-danger">￥{{ attraction.price }}</p>
+                    <p class="card-text">{{ attraction.description|truncatechars:50 }}</p>
+                    <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-primary">查看详情</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">暂无推荐景点</div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- 功能入口 -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="card-title">🗺️ 旅游攻略</h3>
+                    <p class="card-text">查看其他游客分享的旅行攻略和路线规划</p>
+                    <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-primary">查看攻略</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="card-title">🎫 景点预订</h3>
+                    <p class="card-text">浏览热门景点，在线预订门票</p>
+                    <a href="{% url 'attractionsApp:attraction_list' %}" class="btn btn-primary">浏览景点</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="card-title">❤️ 我的收藏</h3>
+                    <p class="card-text">收藏您感兴趣的景点，方便随时查看</p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'favoritesApp:my_favorites' %}" class="btn btn-primary">我的收藏</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">登录查看</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

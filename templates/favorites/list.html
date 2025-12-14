@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}我的收藏{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">我的收藏</h2>
+    
+    {% if favorites %}
+        <div class="row">
+            {% for favorite in favorites %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if favorite.attraction.image %}
+                        <img src="{{ favorite.attraction.image.url }}" class="card-img-top" alt="{{ favorite.attraction.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="text-center p-5 bg-light">暂无图片</div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ favorite.attraction.name }}</h5>
+                        <p class="text-muted">{{ favorite.attraction.get_region_display }}</p>
+                        <p class="card-text text-danger">￥{{ favorite.attraction.price }}</p>
+                        <p class="card-text">{{ favorite.attraction.description|truncatechars:50 }}</p>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'attractionsApp:attraction_detail' favorite.attraction.id %}" class="btn btn-primary">查看详情</a>
+                            <a href="{% url 'favoritesApp:toggle_favorite' favorite.attraction.id %}" class="btn btn-outline-danger btn-sm">取消收藏</a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>收藏于 {{ favorite.created_at|date:"Y-m-d" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">您还没有收藏任何景点，<a href="{% url 'attractionsApp:attraction_list' %}">去看看景点吧</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

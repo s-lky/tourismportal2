@@ -19,7 +19,7 @@
                     <h5 class="card-title">{{ item.name }}</h5>
                     <p class="card-text text-danger">￥{{ item.price }}</p >
                     <p class="card-text">{{ item.description|truncatechars:50 }}</p >
-                    <a href=" " class="btn btn-primary">查看详情</a >
+                    <a href="{% url 'attractionsApp:attraction_detail' item.id %}" class="btn btn-primary">查看详情</a >
                 </div>
             </div>
         </div>

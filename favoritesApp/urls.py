@@ -4,7 +4,6 @@ from . import views
 app_name = 'favoritesApp'
 
 urlpatterns = [
-    path('func5',views.func5,name = 'func5'),    #二级网页功能5
-    path('func6',views.func6,name = 'func6'),    #二级网页功能6
-
+    path('toggle/<int:attraction_id>/', views.toggle_favorite, name='toggle_favorite'),  # 切换收藏
+    path('my_favorites/', views.my_favorites, name='my_favorites'),  # 我的收藏
 ]

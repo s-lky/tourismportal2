@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}预订 - {{ attraction.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">预订：{{ attraction.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <!-- 景点信息展示 -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            {% if attraction.image %}
+                                <img src="{{ attraction.image.url }}" class="img-fluid rounded" alt="{{ attraction.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h5>{{ attraction.name }}</h5>
+                            <p class="text-muted">{{ attraction.get_region_display }}</p>
+                            <p class="text-danger h4">￥{{ attraction.price }} / 张</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- 预订表单 -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.visit_date.id_for_label }}" class="form-label">{{ form.visit_date.label }}</label>
+                            {{ form.visit_date }}
+                            {% if form.visit_date.errors %}
+                                <div class="text-danger small">{{ form.visit_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.quantity.id_for_label }}" class="form-label">{{ form.quantity.label }}</label>
+                            {{ form.quantity }}
+                            {% if form.quantity.errors %}
+                                <div class="text-danger small">{{ form.quantity.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">最多可预订10张</small>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <strong>单价：</strong>￥{{ attraction.price }} × <span id="quantity-display">1</span> 张 = 
+                            <strong class="text-danger" id="total-price">￥{{ attraction.price }}</strong>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">确认预订</button>
+                            <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-outline-secondary">返回</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // 实时计算总价
+    document.getElementById('{{ form.quantity.id_for_label }}').addEventListener('input', function() {
+        const quantity = parseInt(this.value) || 1;
+        const price = {{ attraction.price }};
+        const total = price * quantity;
+        
+        document.getElementById('quantity-display').textContent = quantity;
+        document.getElementById('total-price').textContent = '￥' + total.toFixed(2);
+    });
+</script>
+{% endblock %}
+{% endblock %}
+
