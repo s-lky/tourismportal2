@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 from django.contrib.auth.models import User
@@ -16,7 +17,7 @@ class Booking(models.Model):
     visit_date = models.DateField(verbose_name="游玩日期")
     quantity = models.PositiveIntegerField(default=1, verbose_name="票数")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='paid', verbose_name="状态")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    created_at = models.DateTimeField(default=timezone.now, null=True, blank=True, verbose_name="创建时间")
     
     def __str__(self):
         return f"{self.user.username} - {self.attraction.name} - {self.visit_date}"

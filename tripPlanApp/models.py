@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class TripPlan(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="发布用户")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="发布用户", null=True, blank=True)
     title = models.CharField(max_length=200, verbose_name="攻略标题")
     content = models.TextField(verbose_name="路线详情")
     days = models.IntegerField(verbose_name="建议游玩天数")
