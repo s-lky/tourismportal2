@@ -30,6 +30,7 @@ urlpatterns = [
     path('bookingApp/', include('bookingApp.urls')),
     path('favoritesApp/', include('favoritesApp.urls')),
     path('tripPlanApp/', include('tripPlanApp.urls')),
+    path('foodApp/', include('foodApp.urls')),  # 寻味岭南美食模块
 ]
 #让Django在开发模式可以找到在后台上传的图片
 if settings.DEBUG:

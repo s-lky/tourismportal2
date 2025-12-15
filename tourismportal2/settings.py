@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'homeApp',
     'bookingApp',
     'favoritesApp',
-    'tripPlanApp'
+    'tripPlanApp',
+    'foodApp',  # 寻味岭南 - 美食模块
 ]
 
 MIDDLEWARE = [
