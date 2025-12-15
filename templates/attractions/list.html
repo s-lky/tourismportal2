@@ -1,29 +1,146 @@
 {% extends 'base.html' %}
 
+{% block title %}景点总览 - 畅游广东{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <div class="row">
-        {% for item in attractions %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <!-- 核心代码在这里 -->
-                <!-- item.image 是文件对象，item.image.url 才是访问路径 -->
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                    <!-- 如果没传图，显示一个默认占位图 -->
-                    <div class="text-center p-5 bg-light">暂无图片</div>
-                {% endif %}
+    <h1 class="mb-4">🏖️ 景点总览</h1>
+    
+    <!-- 搜索和筛选区域 -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="get" action="{% url 'attractionsApp:attraction_list' %}" class="row g-3">
+                <!-- 搜索框 -->
+                <div class="col-md-4">
+                    <label for="search" class="form-label">搜索景点名称</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="{{ current_search }}" placeholder="请输入景点名称...">
+                </div>
                 
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.name }}</h5>
-                    <p class="card-text text-danger">￥{{ item.price }}</p >
-                    <p class="card-text">{{ item.description|truncatechars:50 }}</p >
-                    <a href="{% url 'attractionsApp:attraction_detail' item.id %}" class="btn btn-primary">查看详情</a >
+                <!-- 城市筛选 -->
+                <div class="col-md-3">
+                    <label for="city" class="form-label">选择城市</label>
+                    <select class="form-select" id="city" name="city">
+                        <option value="">全部城市</option>
+                        {% for value, label in city_choices %}
+                            <option value="{{ value }}" {% if current_city == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- 类型筛选 -->
+                <div class="col-md-3">
+                    <label for="type" class="form-label">景点类型</label>
+                    <select class="form-select" id="type" name="type">
+                        <option value="">全部类型</option>
+                        {% for value, label in type_choices %}
+                            <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- 按钮区域 -->
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100 mb-3">搜索</button>
+                </div>
+            </form>
+            
+            <!-- 清除筛选按钮 -->
+            {% if current_search or current_city or current_type or current_region %}
+            <div class="mt-2">
+                <a href="{% url 'attractionsApp:attraction_list' %}" class="btn btn-outline-secondary btn-sm">清除所有筛选</a>
+                {% if current_search %}
+                    <span class="badge bg-primary ms-2">搜索: {{ current_search }}</span>
+                {% endif %}
+                {% if current_city %}
+                    <span class="badge bg-info ms-2">城市: {{ current_city|default:"" }}</span>
+                {% endif %}
+                {% if current_type %}
+                    <span class="badge bg-success ms-2">类型: {{ current_type|default:"" }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- 景点列表 - 卡片式布局 -->
+    {% if attractions %}
+        <div class="row">
+            {% for item in attractions %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <!-- 景点图片 -->
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" 
+                             style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="text-center p-5 bg-light" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-muted">暂无图片</span>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="text-muted small mb-2">
+                            <span class="badge bg-secondary">{{ item.get_city_display }}</span>
+                            <span class="badge bg-info ms-1">{{ item.get_attraction_type_display }}</span>
+                        </p>
+                        <p class="card-text text-danger fw-bold fs-5 mb-2">￥{{ item.price }}</p>
+                        <p class="card-text text-muted flex-grow-1">{{ item.description|truncatechars:80 }}</p>
+                        <div class="mt-auto">
+                            <a href="{% url 'attractionsApp:attraction_detail' item.id %}" 
+                               class="btn btn-primary w-100">查看详情</a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted small">
+                        <span>👁️ {{ item.view_count }} 浏览</span>
+                        <span class="ms-3">❤️ {{ item.like_count }} 点赞</span>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+        
+        <!-- 分页导航 -->
+        {% if is_paginated %}
+        <nav aria-label="景点分页">
+            <ul class="pagination justify-content-center mt-4">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if current_search %}search={{ current_search }}&{% endif %}{% if current_city %}city={{ current_city }}&{% endif %}{% if current_type %}type={{ current_type }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}page=1">首页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if current_search %}search={{ current_search }}&{% endif %}{% if current_city %}city={{ current_city }}&{% endif %}{% if current_type %}type={{ current_type }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}page={{ page_obj.previous_page_number }}">上一页</a>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">
+                        第 {{ page_obj.number }} 页 / 共 {{ page_obj.paginator.num_pages }} 页
+                        （共 {{ page_obj.paginator.count }} 个景点）
+                    </span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if current_search %}search={{ current_search }}&{% endif %}{% if current_city %}city={{ current_city }}&{% endif %}{% if current_type %}type={{ current_type }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}page={{ page_obj.next_page_number }}">下一页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if current_search %}search={{ current_search }}&{% endif %}{% if current_city %}city={{ current_city }}&{% endif %}{% if current_type %}type={{ current_type }}&{% endif %}{% if current_region %}region={{ current_region }}&{% endif %}page={{ page_obj.paginator.num_pages }}">末页</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            <h5>暂无景点数据</h5>
+            <p class="mb-0">抱歉，没有找到符合条件的景点，请尝试调整筛选条件。</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
