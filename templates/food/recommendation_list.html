@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}美食推荐列表 - 寻味岭南{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-5">📋 美食推荐</h1>
+            <p class="text-muted">探索用户推荐的广东美食</p>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> 我要投稿
+        </a>
+        {% endif %}
+    </div>
+    
+    <!-- 统计信息 -->
+    {% if total_count %}
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center bg-primary text-white">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ total_count }}</h3>
+                    <small>总推荐数</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ approved_count }}</h3>
+                    <small>已通过</small>
+                </div>
+            </div>
+        </div>
+        {% if user.is_authenticated and my_count %}
+        <div class="col-md-4">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ my_count }}</h3>
+                    <small>我的投稿</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- 推荐列表 -->
+    {% if recommendations %}
+        {% for recommendation in recommendations %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="card-title mb-0">
+                                🍜 {{ recommendation.food_name }}
+                            </h4>
+                            <span class="badge 
+                                {% if recommendation.status == 'approved' %}bg-success
+                                {% elif recommendation.status == 'pending' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ recommendation.get_status_display }}
+                            </span>
+                        </div>
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-geo-alt"></i> <strong>地点：</strong>{{ recommendation.location }}
+                        </p>
+                        <p class="card-text">
+                            <strong>推荐理由：</strong>{{ recommendation.reason|linebreaks }}
+                        </p>
+                        <div class="text-muted small">
+                            <span>👤 推荐人：{{ recommendation.user.username }}</span>
+                            <span class="ms-3">📅 {{ recommendation.created_at|date:"Y-m-d H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- 分页导航 -->
+        {% if is_paginated %}
+        <nav aria-label="推荐分页">
+            <ul class="pagination justify-content-center mt-4">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">首页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一页</a>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">
+                        第 {{ page_obj.number }} 页 / 共 {{ page_obj.paginator.num_pages }} 页
+                    </span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">下一页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">末页</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <!-- 空状态 -->
+        <div class="alert alert-info text-center" role="alert">
+            <h5>暂无推荐数据</h5>
+            <p class="mb-3">还没有用户推荐美食，快来成为第一个推荐者吧！</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary">我要投稿</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">登录后投稿</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
