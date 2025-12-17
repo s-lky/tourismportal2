@@ -7,7 +7,7 @@
     <!-- 页面标题 -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="display-5">📋 美食推荐</h1>
+            <h1 class="display-5">美食推荐</h1>
             <p class="text-muted">探索用户推荐的广东美食</p>
         </div>
         {% if user.is_authenticated %}
@@ -58,7 +58,7 @@
                     <div class="col-md-10">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h4 class="card-title mb-0">
-                                🍜 {{ recommendation.food_name }}
+                                {{ recommendation.food_name }}
                             </h4>
                             <span class="badge 
                                 {% if recommendation.status == 'approved' %}bg-success
@@ -74,8 +74,8 @@
                             <strong>推荐理由：</strong>{{ recommendation.reason|linebreaks }}
                         </p>
                         <div class="text-muted small">
-                            <span>👤 推荐人：{{ recommendation.user.username }}</span>
-                            <span class="ms-3">📅 {{ recommendation.created_at|date:"Y-m-d H:i" }}</span>
+                            <span>推荐人：{{ recommendation.user.username }}</span>
+                            <span class="ms-3">{{ recommendation.created_at|date:"Y-m-d H:i" }}</span>
                         </div>
                     </div>
                 </div>

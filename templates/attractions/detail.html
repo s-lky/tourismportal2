@@ -45,9 +45,9 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'favoritesApp:toggle_favorite' attraction.id %}" class="btn btn-outline-danger w-100">
                     {% if is_favorited %}
-                        ❤️ 已收藏
+                        已收藏
                     {% else %}
-                        🤍 收藏
+                        收藏
                     {% endif %}
                 </a>
             {% endif %}

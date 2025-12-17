@@ -17,18 +17,13 @@
     <!-- ================= 3. 导航栏 (Navbar) ================= -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'home' %}">🏖️ 广东旅游</a >
-            
-            <!-- 手机端汉堡菜单按钮 -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">广东旅游</a >
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <!-- 首页 -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">首页</a >
+                        <a class="nav-link active" href="{% url 'home' %}">首页</a >
                     </li>
 
                     <!-- 景点大全 (下拉菜单) -->
@@ -62,7 +57,7 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'favoritesApp:my_favorites' %}">我的收藏</a >
+                        <a class="nav-link" href="{% url 'favoritesApp:my_favorites' %}">收藏</a >
                     </li>
                     {% endif %}
                 </ul>
@@ -104,7 +99,7 @@
     <!-- ================= 5. 页脚 (Footer) ================= -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
         <div class="container">
-            <p class="mb-0">&copy; 2025 广东旅游门户网 | Python Web 期末大作业</p >
+            <p class="mb-0">&copy; 2025 广东旅游门户网 | Python Web </p >
         </div>
     </footer>
 
