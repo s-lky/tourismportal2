@@ -6,7 +6,7 @@ class Attraction(models.Model):
     REGION_CHOICES = (
         ('yue_bei', '粤北'),
         ('yue_xi', '粤西'),
-        ('yue_nan', '粤南'),
+        ('yue_nan', '珠三角'),
         ('yue_dong', '粤东'),
         ('gang_ao', '港澳'),
     )
@@ -24,7 +24,16 @@ class Attraction(models.Model):
         ('zhaoqing', '肇庆'),
         ('shantou', '汕头'),
         ('chaozhou', '潮州'),
-        ('other', '其他'),
+        ('jieyang', '揭阳'),
+        ('shanwei', '汕尾'),
+        ('meizhou', '梅州'),
+        ('shaoguan', '韶关'),
+        ('qingyuan', '清远'),
+        ('heyuan', '河源'),
+        ('maoming', '茂名'),
+        ('yangjiang', '阳江'),
+        ('yunfu', '云浮'),
+        ('zhanjiang', '湛江'),
     )
     
     # 定义类型选项
