@@ -5,7 +5,16 @@
 {% block title %}首页 - 广东旅游门户网{% endblock %}
 
 {% block extra_css %}
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
+    body {
+        background-image: linear-gradient(rgba(3, 213, 255, 0.01), rgba(14, 207, 255, 0.01)), url("{% static 'img/firstpage.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
     .home-hero {
         position: relative;
         min-height: 80vh;
@@ -14,12 +23,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        /* 调整rgba 的最后一个数字(透明度)，透过颜色看到背景图 */
-        background-image: linear-gradient(rgba(3, 213, 255, 0.01), rgba(14, 207, 255, 0.01)), url("{% static 'img/firstpage.png' %}");
-        background-size: cover;
-        background-position: center;
-        border-radius: 0.75rem;
-        overflow: hidden;
+        padding: 2rem 0;
     }
     .home-hero-inner {
         max-width: 900px;
@@ -57,10 +61,19 @@
         border-bottom: 1px solid #ddd;
         border-radius: 0;
         padding-left: 0;
+        background-color: transparent;
     }
     .home-search-input:focus {
         box-shadow: none;
         border-color: #ff6b3d;
+        background-color: transparent;
+    }
+    .recommended-section {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        border-radius: 0.75rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
     .home-search-btn {
         background-color: #ff6b3d;
@@ -101,7 +114,7 @@
 {% block content %}
 <div class="container mt-4">
     <!-- 首屏大图区域 -->
-    <section class="home-hero mb-5">
+    <section class="home-hero">
         <div class="home-hero-inner">
             <div class="mb-3">
                 <div class="home-hero-title-cn">欢迎来到</div>
@@ -115,11 +128,11 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">出发日期</div>
-                            <input type="text" class="form-control home-search-input" name="start_date" placeholder="请选择出发日期">
+                            <input type="text" class="form-control home-search-input datepicker" id="start_date" name="start_date" placeholder="请选择出发日期" readonly>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">返回日期</div>
-                            <input type="text" class="form-control home-search-input" name="end_date" placeholder="请选择返回日期">
+                            <input type="text" class="form-control home-search-input datepicker" id="end_date" name="end_date" placeholder="请选择返回日期" readonly>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">目的地</div>
@@ -138,8 +151,9 @@
     </section>
 
     <!-- 推荐景点 -->
-    <h2 class="mb-4">推荐景点</h2>
-    <div class="row">
+    <div class="recommended-section">
+        <h2 class="mb-4">推荐景点</h2>
+        <div class="row">
         {% for attraction in featured_attractions %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
@@ -151,7 +165,9 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ attraction.name }}</h5>
                     <p class="text-muted">{{ attraction.get_region_display }}</p>
-                    <p class="card-text text-danger">￥{{ attraction.price }}</p>
+                    <p class="card-text {% if attraction.is_free %}text-success{% else %}text-danger{% endif %}">
+                        {% if attraction.is_free %}门票免费{% else %}￥{{ attraction.price }}{% endif %}
+                    </p>
                     <p class="card-text">{{ attraction.description|truncatechars:50 }}</p>
                     <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-primary">查看详情</a>
                 </div>
@@ -162,41 +178,35 @@
             <div class="alert alert-info">暂无推荐景点</div>
         </div>
         {% endfor %}
-    </div>
-
-    <!-- 功能入口 -->
-    <div class="row mt-5">
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <h3 class="card-title">旅游攻略</h3>
-                    <p class="card-text">查看其他游客分享的旅行攻略和路线规划</p>
-                    <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-primary">查看攻略</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <h3 class="card-title">景点预订</h3>
-                    <p class="card-text">浏览热门景点，在线预订门票</p>
-                    <a href="{% url 'attractionsApp:attraction_list' %}" class="btn btn-primary">浏览景点</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <h3 class="card-title">我的收藏</h3>
-                    <p class="card-text">收藏您感兴趣的景点，方便随时查看</p>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'favoritesApp:my_favorites' %}" class="btn btn-primary">我的收藏</a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary">登录查看</a>
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 </div>
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+<script>
+    // 配置中文语言
+    flatpickr.localize(flatpickr.l10ns.zh);
+    
+    // 出发日期选择器
+    const startDatePicker = flatpickr("#start_date", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        locale: "zh",
+        onChange: function(selectedDates, dateStr, instance) {
+            // 当选择出发日期后，更新返回日期的最小日期
+            if (selectedDates.length > 0) {
+                endDatePicker.set('minDate', selectedDates[0]);
+            }
+        }
+    });
+    
+    // 返回日期选择器
+    const endDatePicker = flatpickr("#end_date", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        locale: "zh"
+    });
+</script>
 {% endblock %}

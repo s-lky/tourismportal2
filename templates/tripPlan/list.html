@@ -18,6 +18,9 @@
             {% for plan in trip_plans %}
             <div class="col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">
+                    {% if plan.image %}
+                    <img src="{{ plan.image.url }}" class="card-img-top" alt="{{ plan.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ plan.title }}</h5>
                         <p class="text-muted">

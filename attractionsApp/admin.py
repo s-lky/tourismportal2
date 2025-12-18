@@ -20,7 +20,7 @@ class AttractionAdmin(admin.ModelAdmin):
             'fields': ('name', 'region', 'city', 'attraction_type', 'description')
         }),
         ('价格与时间', {
-            'fields': ('price', 'opening_hours')
+            'fields': ('is_free', 'price', 'opening_hours')
         }),
         ('图片与地图', {
             'fields': ('image', 'map_image')

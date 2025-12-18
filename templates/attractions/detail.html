@@ -22,7 +22,11 @@
             </p>
             
             <div class="mb-4">
-                <h3 class="text-danger mb-2">￥{{ attraction.price }} <small class="text-muted">起</small></h3>
+                {% if attraction.is_free %}
+                    <h3 class="text-success mb-2">门票免费</h3>
+                {% else %}
+                    <h3 class="text-danger mb-2">￥{{ attraction.price }} <small class="text-muted">起</small></h3>
+                {% endif %}
             </div>
             
             <div class="mb-4">

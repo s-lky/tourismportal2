@@ -11,6 +11,12 @@
                     <h3 class="mb-0">{{ plan.title }}</h3>
                 </div>
                 <div class="card-body">
+                    {% if plan.image %}
+                    <div class="mb-4 text-center">
+                        <img src="{{ plan.image.url }}" class="img-fluid rounded" alt="{{ plan.title }}" style="max-height: 500px; width: auto;">
+                    </div>
+                    {% endif %}
+                    
                     <div class="mb-3 text-muted">
                         <small>
                             <strong>发布者：</strong>{{ plan.user.username }} | 

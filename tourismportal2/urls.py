@@ -26,6 +26,7 @@ urlpatterns = [
     path('login/', user_login, name='login'),
     path('register/', user_register, name='register'),
     path('logout/', user_logout, name='logout'),
+    path('homeApp/', include('homeApp.urls')),
     path('attractionsApp/', include('attractionsApp.urls')),
     path('bookingApp/', include('bookingApp.urls')),
     path('favoritesApp/', include('favoritesApp.urls')),

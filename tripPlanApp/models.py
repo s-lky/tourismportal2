@@ -7,6 +7,7 @@ class TripPlan(models.Model):
     title = models.CharField(max_length=200, verbose_name="攻略标题")
     content = models.TextField(verbose_name="路线详情")
     days = models.IntegerField(verbose_name="建议游玩天数")
+    image = models.ImageField(upload_to='tripPlans/', verbose_name="攻略图片", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="发布时间")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新时间")
     

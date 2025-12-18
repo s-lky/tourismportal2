@@ -47,6 +47,36 @@ class AttractionListView(ListView):
         # 传递选项数据供模板使用
         context['city_choices'] = Attraction.CITY_CHOICES
         context['type_choices'] = Attraction.TYPE_CHOICES
+        
+        # 计算分页页码范围
+        page_obj = context.get('page_obj')
+        if page_obj:
+            total_pages = page_obj.paginator.num_pages
+            current_page = page_obj.number
+            
+            if total_pages <= 7:
+                # 如果总页数 <= 7，显示所有页码
+                context['page_range'] = list(range(1, total_pages + 1))
+                context['show_ellipsis'] = False
+            else:
+                # 如果总页数 > 7，根据当前页位置决定显示哪些页码
+                if current_page <= 4:
+                    # 当前页在前4页，显示前6页和最后一页
+                    context['page_range'] = list(range(1, 7))
+                    context['show_last_page'] = True
+                    context['show_ellipsis'] = True
+                elif current_page >= total_pages - 3:
+                    # 当前页在后4页，显示第一页、省略号、后6页
+                    context['page_range'] = list(range(max(1, total_pages - 5), total_pages + 1))
+                    context['show_first_page'] = True
+                    context['show_ellipsis'] = True
+                else:
+                    # 当前页在中间，显示第一页、省略号、当前页前后各2页、省略号、最后一页
+                    context['page_range'] = list(range(max(1, current_page - 2), min(total_pages + 1, current_page + 3)))
+                    context['show_first_page'] = True
+                    context['show_last_page'] = True
+                    context['show_ellipsis'] = True
+        
         return context
 
 def attraction_detail(request, attraction_id):

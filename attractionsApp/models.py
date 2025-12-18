@@ -48,7 +48,8 @@ class Attraction(models.Model):
     city = models.CharField(max_length=20, choices=CITY_CHOICES, verbose_name="所属城市", default='guangzhou')
     attraction_type = models.CharField(max_length=20, choices=TYPE_CHOICES, verbose_name="景点类型", default='mixed')
     description = models.TextField(verbose_name="景点介绍")
-    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="门票价格")
+    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="门票价格", null=True, blank=True)
+    is_free = models.BooleanField(default=False, verbose_name="门票免费")
     # 需要配置Media设置才能上传图片，后面会讲
     image = models.ImageField(upload_to='attractions/', verbose_name="封面图")
     opening_hours = models.CharField(max_length=200, verbose_name="开放时间", default="09:00-18:00")
@@ -65,6 +66,15 @@ class Attraction(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_price_display(self):
+        """获取价格显示文本"""
+        if self.is_free:
+            return "门票免费"
+        elif self.price:
+            return f"￥{self.price}"
+        else:
+            return "门票免费"
 
 
 class AttractionImage(models.Model):

@@ -4,7 +4,7 @@ from .models import TripPlan
 class TripPlanForm(forms.ModelForm):
     class Meta:
         model = TripPlan
-        fields = ['title', 'content', 'days']
+        fields = ['title', 'content', 'days', 'image']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -25,6 +25,7 @@ class TripPlanForm(forms.ModelForm):
             'title': '攻略标题',
             'content': '路线详情',
             'days': '建议游玩天数',
+            'image': '攻略图片',
         }
     
     def clean_days(self):

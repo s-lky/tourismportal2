@@ -20,7 +20,7 @@ def trip_plan_detail(request, plan_id):
 def create_trip_plan(request):
     """创建攻略"""
     if request.method == 'POST':
-        form = TripPlanForm(request.POST)
+        form = TripPlanForm(request.POST, request.FILES)
         if form.is_valid():
             plan = form.save(commit=False)
             plan.user = request.user

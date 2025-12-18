@@ -3,7 +3,8 @@ from django.shortcuts import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserProfileForm
+from .models import UserProfile
 
 # Create your views here.
 def home(request):
@@ -58,3 +59,25 @@ def user_logout(request):
     logout(request)
     messages.success(request, '您已成功退出')
     return redirect('home')
+
+
+@login_required
+def user_profile(request):
+    """用户中心 - 显示和编辑用户资料"""
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '资料更新成功！')
+            return redirect('homeApp:user_profile')
+        else:
+            messages.error(request, '请检查表单输入')
+    else:
+        form = UserProfileForm(instance=profile, user=request.user)
+    
+    return render(request, 'home/profile.html', {
+        'form': form,
+        'profile': profile
+    })

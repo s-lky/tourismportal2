@@ -9,17 +9,52 @@
     <!-- 2. 引入 Bootstrap 5 CSS (使用CDN，确保电脑联网) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- 自定义 CSS (如果以后有的话) -->
+    <!-- 自定义 CSS -->
+    <style>
+        .navbar-custom {
+            background: linear-gradient(to right, #4A90E2, #2E5C8A) !important;
+            padding: 12px 0;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-text {
+            color: #ffffff !important;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #E0E0E0 !important;
+        }
+        .navbar-custom .btn-outline-light {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+        .navbar-custom .btn-outline-light:hover {
+            background-color: #ffffff;
+            color: #2E5C8A;
+        }
+        .navbar-custom .dropdown-menu {
+            background-color: #ffffff;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .navbar-custom .dropdown-item {
+            color: #333;
+        }
+        .navbar-custom .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #2E5C8A;
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     <!-- ================= 3. 导航栏 (Navbar) ================= -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'home' %}">广东旅游</a >
             
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- 左侧导航 -->
                 <ul class="navbar-nav me-auto">
                     <!-- 首页 -->
                     <li class="nav-item">
@@ -39,41 +74,94 @@
                             <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_bei">粤北名胜</a ></li>
                             <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_xi">粤西古迹</a ></li>
                             <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=yue_dong">粤东海韵</a ></li>
-                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?region=gang_ao">港澳特区</a ></li>
                         </ul>
                     </li>
 
-                    <!-- 寻味岭南 -->
+                    <!-- 港澳特区 -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'foodApp:food_gallery' %}">寻味岭南</a >
+                        <a class="nav-link" href="{% url 'attractionsApp:attraction_list' %}?region=gang_ao">港澳特区</a >
+                    </li>
+
+                    <!-- 寻味岭南 (下拉菜单) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            寻味岭南
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'foodApp:food_gallery' %}">美食地图</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'foodApp:food_recommend' %}">美食投稿</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'foodApp:recommendation_list' %}">推荐列表</a ></li>
+                        </ul>
                     </li>
                     
-                    <!-- 其他功能模块 -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tripPlanApp:trip_plan_list' %}">旅游攻略</a >
+                    <!-- 旅游攻略 (下拉菜单) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            旅游攻略
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'tripPlanApp:trip_plan_list' %}">攻略列表</a ></li>
+                            {% if user.is_authenticated %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'tripPlanApp:create_trip_plan' %}">发布攻略</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'tripPlanApp:my_trip_plans' %}">我的攻略</a ></li>
+                            {% endif %}
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'bookingApp:my_bookings' %}">我的订单</a >
+                    
+                    <!-- 我的订单 (下拉菜单) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            我的订单
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'bookingApp:my_bookings' %}">订单列表</a ></li>
+                        </ul>
                     </li>
+                    
+                    <!-- 收藏 (下拉菜单) -->
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'favoritesApp:my_favorites' %}">收藏</a >
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            收藏
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'favoritesApp:my_favorites' %}">我的收藏</a ></li>
+                        </ul>
                     </li>
                     {% endif %}
                 </ul>
 
-                <!-- 右侧登录注册区域 -->
-                <div class="d-flex">
+                <!-- 右侧用户中心区域 -->
+                <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-                        <span class="navbar-text text-white me-3">
-                            欢迎, {{ user.username }}
-                        </span>
-                        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">退出</a >
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" style="display: flex; align-items: center;">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="头像" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; object-fit: cover;">
+                            {% else %}
+                                <span style="width: 30px; height: 30px; border-radius: 50%; background-color: rgba(255,255,255,0.3); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; font-weight: bold; color: white;">{{ user.username|first|upper }}</span>
+                            {% endif %}
+                            <span style="margin-left: 5px;">{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'homeApp:user_profile' %}">个人中心</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tripPlanApp:my_trip_plans' %}">我的攻略</a></li>
+                            <li><a class="dropdown-item" href="{% url 'favoritesApp:my_favorites' %}">我的收藏</a></li>
+                            <li><a class="dropdown-item" href="{% url 'bookingApp:my_bookings' %}">我的订单</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">退出登录</a></li>
+                        </ul>
+                    </li>
                     {% else %}
-                        <a href="/login/" class="btn btn-outline-light btn-sm me-2">登录</a >
-                        <a href="/register/" class="btn btn-light btn-sm">注册</a >
+                    <li class="nav-item">
+                        <a href="/login/" class="btn btn-outline-light btn-sm me-2">登录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/register/" class="btn btn-light btn-sm">注册</a>
+                    </li>
                     {% endif %}
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
