@@ -2,6 +2,28 @@
 
 {% block title %}用户登录{% endblock %}
 
+{% block extra_css %}
+<style>
+    .card-header.bg-primary {
+        background-color: #FAA331 !important;
+    }
+    .btn-primary {
+        background-color: #FAA331;
+        border-color: #FAA331;
+        color: #fff;
+    }
+    .btn-primary:hover {
+        background-color: #e8921f;
+        border-color: #e8921f;
+    }
+    .btn-primary:focus,
+    .btn-primary:active {
+        background-color: #e8921f;
+        border-color: #e8921f;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">

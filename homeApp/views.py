@@ -25,7 +25,6 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, f'欢迎回来，{user.username}！')
             next_url = request.GET.get('next')
             if next_url:
                 return redirect(next_url)
@@ -44,7 +43,6 @@ def user_register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, f'注册成功！欢迎 {user.username}')
             # 自动登录
             login(request, user)
             return redirect('home')
@@ -57,7 +55,6 @@ def user_logout(request):
     """用户退出"""
     from django.contrib.auth import logout
     logout(request)
-    messages.success(request, '您已成功退出')
     return redirect('home')
 
 
@@ -70,7 +67,6 @@ def user_profile(request):
         form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, '资料更新成功！')
             return redirect('homeApp:user_profile')
         else:
             messages.error(request, '请检查表单输入')

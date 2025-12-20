@@ -2,12 +2,50 @@
 
 {% block title %}预订 - {{ attraction.name }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 预定页面卡片头部样式 */
+    .booking-create-card-header {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+    }
+    
+    /* 预定页面按钮样式 */
+    .booking-create-btn-primary {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .booking-create-btn-primary:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .booking-create-btn-primary:focus,
+    .booking-create-btn-primary:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
+    }
+    
+    /* 预定页面信息提示框样式 */
+    .booking-create-alert-info {
+        background-color: #fff3e0 !important;
+        border-color: #FAA331 !important;
+        color: #8b4513 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary booking-create-card-header text-white">
                     <h4 class="mb-0">预订：{{ attraction.name }}</h4>
                 </div>
                 <div class="card-body">
@@ -48,13 +86,13 @@
                             <small class="text-muted">最多可预订10张</small>
                         </div>
                         
-                        <div class="alert alert-info">
+                        <div class="alert alert-info booking-create-alert-info">
                             <strong>单价：</strong>￥{{ attraction.price }} × <span id="quantity-display">1</span> 张 = 
                             <strong class="text-danger" id="total-price">￥{{ attraction.price }}</strong>
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">确认预订</button>
+                            <button type="submit" class="btn btn-primary btn-lg booking-create-btn-primary">确认预订</button>
                             <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-outline-secondary">返回</a>
                         </div>
                     </form>
