@@ -75,6 +75,79 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
+    .module-section {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        border-radius: 0.75rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #FAA331;
+    }
+    .module-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+    .module-title-en {
+        font-size: 0.9rem;
+        color: #666;
+        margin-left: 0.5rem;
+    }
+    .module-more {
+        color: #FAA331;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .module-more:hover {
+        color: #e8921f;
+        text-decoration: underline;
+    }
+    .module-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+    .module-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    .module-text {
+        line-height: 1.8;
+        color: #555;
+    }
+    .module-list {
+        list-style: none;
+        padding: 0;
+    }
+    .module-list-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .module-list-item:last-child {
+        border-bottom: none;
+    }
+    .module-list-item a {
+        color: #333;
+        text-decoration: none;
+    }
+    .module-list-item a:hover {
+        color: #FAA331;
+    }
+    @media (max-width: 768px) {
+        .module-content {
+            grid-template-columns: 1fr;
+        }
+    }
     .home-search-btn {
         background-color: #FAA331;
         border-color: #FAA331;
@@ -198,6 +271,106 @@
             <div class="alert alert-info">暂无推荐景点</div>
         </div>
         {% endfor %}
+        </div>
+    </div>
+
+    <!-- 寻味岭南模块 -->
+    <div class="module-section">
+        <div class="module-header">
+            <div>
+                <span class="module-title">寻味岭南</span>
+                <span class="module-title-en">/ Taste Lingnan</span>
+            </div>
+            <a href="{% url 'foodApp:food_gallery' %}" class="module-more">+更多</a>
+        </div>
+        <div class="module-content">
+            <div>
+                {% if featured_foods %}
+                    {% for food in featured_foods %}
+                        {% if forloop.first %}
+                            {% if food.image %}
+                                <img src="{{ food.image.url }}" alt="{{ food.name }}" class="module-image">
+                            {% else %}
+                                <div class="module-image bg-light d-flex align-items-center justify-content-center">
+                                    <span class="text-muted">暂无图片</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="module-image bg-light d-flex align-items-center justify-content-center">
+                        <span class="text-muted">暂无图片</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                <p class="module-text">
+                    广东美食文化源远流长，从早茶点心到夜宵小食，从粤菜经典到地方特色，每一道美食都承载着岭南文化的深厚底蕴。探索广东美食，品味岭南风情。
+                </p>
+                {% if featured_foods %}
+                    <ul class="module-list">
+                        {% for food in featured_foods|slice:":5" %}
+                        <li class="module-list-item">
+                            <a href="{% url 'foodApp:food_detail' food.id %}">
+                                [{{ food.created_at|date:"Y-m-d" }}] {{ food.name }} {{ food.get_rating_display }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">暂无美食推荐</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 旅游攻略模块 -->
+    <div class="module-section">
+        <div class="module-header">
+            <div>
+                <span class="module-title">旅游攻略</span>
+                <span class="module-title-en">/ Travel Guide</span>
+            </div>
+            <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="module-more">+更多</a>
+        </div>
+        <div class="module-content">
+            <div>
+                {% if featured_plans %}
+                    {% for plan in featured_plans %}
+                        {% if forloop.first %}
+                            {% if plan.image %}
+                                <img src="{{ plan.image.url }}" alt="{{ plan.title }}" class="module-image">
+                            {% else %}
+                                <div class="module-image bg-light d-flex align-items-center justify-content-center">
+                                    <span class="text-muted">暂无图片</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="module-image bg-light d-flex align-items-center justify-content-center">
+                        <span class="text-muted">暂无图片</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                <p class="module-text">
+                    分享您的旅行经验，记录美好旅程。从经典路线到小众景点，从美食推荐到住宿攻略，让每一次旅行都成为难忘的回忆。
+                </p>
+                {% if featured_plans %}
+                    <ul class="module-list">
+                        {% for plan in featured_plans|slice:":5" %}
+                        <li class="module-list-item">
+                            <a href="{% url 'tripPlanApp:trip_plan_detail' plan.id %}">
+                                [{{ plan.created_at|date:"Y-m-d" }}] {{ plan.title }} ({{ plan.days }}天)
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">暂无攻略</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

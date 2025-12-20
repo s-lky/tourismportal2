@@ -10,9 +10,19 @@ from .models import UserProfile
 def home(request):
     """首页"""
     from attractionsApp.models import Attraction
+    from foodApp.models import Food
+    from tripPlanApp.models import TripPlan
     # 显示最新的6个景点
     featured_attractions = Attraction.objects.all()[:6]
-    return render(request, 'home/index.html', {'featured_attractions': featured_attractions})
+    # 显示最新的3个美食
+    featured_foods = Food.objects.all()[:3]
+    # 显示最新的3个攻略
+    featured_plans = TripPlan.objects.all()[:3]
+    return render(request, 'home/index.html', {
+        'featured_attractions': featured_attractions,
+        'featured_foods': featured_foods,
+        'featured_plans': featured_plans,
+    })
 
 def user_login(request):
     """用户登录"""
