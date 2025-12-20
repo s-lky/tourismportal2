@@ -12,7 +12,7 @@
     <!-- 自定义 CSS -->
     <style>
         .navbar-custom {
-            background: linear-gradient(to right, #4A90E2, #2E5C8A) !important;
+            background: linear-gradient(to right, #FAA331, #F9D618) !important;
             padding: 12px 0;
         }
         .navbar-custom .navbar-brand,
@@ -21,7 +21,7 @@
             color: #ffffff !important;
         }
         .navbar-custom .nav-link:hover {
-            color: #E0E0E0 !important;
+            color: #6b6a67 !important;
         }
         .navbar-custom .btn-outline-light {
             border-color: #ffffff;
@@ -29,7 +29,7 @@
         }
         .navbar-custom .btn-outline-light:hover {
             background-color: #ffffff;
-            color: #2E5C8A;
+            color: #6b6a67;
         }
         .navbar-custom .dropdown-menu {
             background-color: #ffffff;
@@ -41,7 +41,7 @@
         }
         .navbar-custom .dropdown-item:hover {
             background-color: #f8f9fa;
-            color: #2E5C8A;
+            color: #FAA331;
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -77,9 +77,15 @@
                         </ul>
                     </li>
 
-                    <!-- 港澳特区 -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'attractionsApp:attraction_list' %}?region=gang_ao">港澳特区</a >
+                    <!-- 港澳特区 (下拉菜单) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            港澳特区
+                        </a >
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?city=xianggang">香港</a ></li>
+                            <li><a class="dropdown-item" href="{% url 'attractionsApp:attraction_list' %}?city=aomeng">澳门</a ></li>
+                        </ul>
                     </li>
 
                     <!-- 寻味岭南 (下拉菜单) -->

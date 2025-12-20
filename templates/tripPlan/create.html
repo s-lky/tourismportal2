@@ -2,12 +2,42 @@
 
 {% block title %}发布攻略{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 发布攻略页按钮和卡片样式 */
+    .trip-create-btn {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .trip-create-btn:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .trip-create-btn:focus,
+    .trip-create-btn:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
+    }
+    
+    .trip-create-card-header {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary trip-create-card-header text-white">
                     <h4 class="mb-0">发布旅游攻略</h4>
                 </div>
                 <div class="card-body">
@@ -50,7 +80,7 @@
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">发布攻略</button>
+                            <button type="submit" class="btn btn-primary btn-lg trip-create-btn">发布攻略</button>
                             <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-outline-secondary">取消</a>
                         </div>
                     </form>

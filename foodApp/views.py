@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import ListView
@@ -11,6 +11,11 @@ def food_gallery(request):
     """美食地图/图鉴 - 瀑布流展示"""
     foods = Food.objects.all().order_by('-created_at')
     return render(request, 'food/gallery.html', {'foods': foods})
+
+def food_detail(request, food_id):
+    """美食详情页"""
+    food = get_object_or_404(Food, id=food_id)
+    return render(request, 'food/detail.html', {'food': food})
 
 @login_required
 def food_recommend(request):

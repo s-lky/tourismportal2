@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Attraction, AttractionImage, AttractionLike
+from .models import Attraction, AttractionImage
+# from .models import AttractionLike
+
 
 
 class AttractionImageInline(admin.TabularInline):
@@ -38,8 +40,8 @@ class AttractionImageAdmin(admin.ModelAdmin):
     search_fields = ('attraction__name',)
 
 
-@admin.register(AttractionLike)
-class AttractionLikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'attraction', 'created_at')
-    list_filter = ('created_at',)
-    search_fields = ('user__username', 'attraction__name')
+# @admin.register(AttractionLike)
+# class AttractionLikeAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'attraction', 'created_at')
+#     list_filter = ('created_at',)
+#     search_fields = ('user__username', 'attraction__name')

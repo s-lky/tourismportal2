@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     body {
-        background-image: linear-gradient(rgba(3, 213, 255, 0.01), rgba(14, 207, 255, 0.01)), url("{% static 'img/firstpage.png' %}");
+        background-image: linear-gradient(rgba(3, 213, 255, 0.01), rgba(14, 207, 255, 0.01)), url("{% static 'img/firestpage2.jpg' %}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
@@ -65,7 +65,7 @@
     }
     .home-search-input:focus {
         box-shadow: none;
-        border-color: #ff6b3d;
+        border-color: #FAA331;
         background-color: transparent;
     }
     .recommended-section {
@@ -76,15 +76,35 @@
         margin-bottom: 2rem;
     }
     .home-search-btn {
-        background-color: #ff6b3d;
-        border-color: #ff6b3d;
+        background-color: #FAA331;
+        border-color: #FAA331;
         font-weight: 600;
         padding: 0.75rem 2.5rem;
         font-size: 1.05rem;
     }
     .home-search-btn:hover {
-        background-color: #ff4a10;
-        border-color: #ff4a10;
+        background-color: #F5F0E6;
+        border-color: #F5F0E6;
+    }
+    /* 首页推荐景点按钮样式 */
+    .home-featured-btn {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .home-featured-btn:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .home-featured-btn:focus,
+    .home-featured-btn:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
     }
     @media (max-width: 768px) {
         .home-hero {
@@ -169,7 +189,7 @@
                         {% if attraction.is_free %}门票免费{% else %}￥{{ attraction.price }}{% endif %}
                     </p>
                     <p class="card-text">{{ attraction.description|truncatechars:50 }}</p>
-                    <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-primary">查看详情</a>
+                    <a href="{% url 'attractionsApp:attraction_detail' attraction.id %}" class="btn btn-primary home-featured-btn">查看详情</a>
                 </div>
             </div>
         </div>

@@ -48,6 +48,14 @@ class AttractionListView(ListView):
         context['city_choices'] = Attraction.CITY_CHOICES
         context['type_choices'] = Attraction.TYPE_CHOICES
         
+        # 获取当前城市的显示名称
+        current_city_value = context['current_city']
+        if current_city_value:
+            city_dict = dict(Attraction.CITY_CHOICES)
+            context['current_city_label'] = city_dict.get(current_city_value, '')
+        else:
+            context['current_city_label'] = ''
+        
         # 计算分页页码范围
         page_obj = context.get('page_obj')
         if page_obj:

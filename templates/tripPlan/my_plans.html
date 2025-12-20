@@ -2,20 +2,65 @@
 
 {% block title %}我的攻略{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 我的攻略页按钮样式 */
+    .my-trip-plan-btn {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .my-trip-plan-btn:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .my-trip-plan-btn:focus,
+    .my-trip-plan-btn:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
+    }
+    
+    .my-trip-plan-outline-btn {
+        border-color: #FAA331 !important;
+        color: #FAA331 !important;
+        background-color: transparent !important;
+    }
+    
+    .my-trip-plan-outline-btn:hover {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .my-trip-plan-alert-info {
+        background-color: #fff3e0 !important;
+        border-color: #FAA331 !important;
+        color: #8b4513 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>我的攻略</h2>
-        <a href="{% url 'tripPlanApp:create_trip_plan' %}" class="btn btn-primary">发布新攻略</a>
+        <a href="{% url 'tripPlanApp:create_trip_plan' %}" class="btn btn-primary my-trip-plan-btn">发布新攻略</a>
     </div>
     
     {% if trip_plans %}
         <div class="row">
             {% for plan in trip_plans %}
             <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
+                <div class="card shadow-sm" style="border-radius: 12px; overflow: hidden;">
                     {% if plan.image %}
-                    <img src="{{ plan.image.url }}" class="card-img-top" alt="{{ plan.title }}" style="height: 200px; object-fit: cover;">
+                    <div style="width: 100%; height: 250px; overflow: hidden;">
+                        <img src="{{ plan.image.url }}" class="card-img-top" alt="{{ plan.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ plan.title }}</h5>
@@ -23,14 +68,14 @@
                             <small>{{ plan.days }}天 | {{ plan.created_at|date:"Y-m-d" }}</small>
                         </p>
                         <p class="card-text">{{ plan.content|truncatewords:50 }}</p>
-                        <a href="{% url 'tripPlanApp:trip_plan_detail' plan.id %}" class="btn btn-outline-primary">查看详情</a>
+                        <a href="{% url 'tripPlanApp:trip_plan_detail' plan.id %}" class="btn btn-outline-primary my-trip-plan-outline-btn">查看详情</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="alert alert-info text-center">
+        <div class="alert alert-info my-trip-plan-alert-info text-center">
             <p class="mb-0">您还没有发布过攻略，<a href="{% url 'tripPlanApp:create_trip_plan' %}">立即发布</a></p>
         </div>
     {% endif %}

@@ -2,11 +2,46 @@
 
 {% block title %}景点总览 - 畅游广东{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 搜索按钮和查看详情按钮样式 */
+    .attraction-search-btn,
+    .attraction-detail-btn {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .attraction-search-btn:hover,
+    .attraction-detail-btn:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .attraction-search-btn:focus,
+    .attraction-detail-btn:focus,
+    .attraction-search-btn:active,
+    .attraction-detail-btn:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">景点总览</h1>
+    <!-- 根据城市显示标题 -->
+    {% if current_city == 'xianggang' or current_city == 'aomeng' %}
+        <h1 class="mb-4">{{ current_city_label }}景点</h1>
+    {% else %}
+        <h1 class="mb-4">景点总览</h1>
+    {% endif %}
     
-    <!-- 搜索和筛选区域 -->
+    <!-- 搜索和筛选区域 - 港澳特区时隐藏 -->
+    {% if current_city != 'xianggang' and current_city != 'aomeng' %}
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <form method="get" action="{% url 'attractionsApp:attraction_list' %}" class="row g-3">
@@ -45,7 +80,7 @@
                 
                 <!-- 按钮区域 -->
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100 mb-3">搜索</button>
+                    <button type="submit" class="btn btn-primary attraction-search-btn w-100 mb-3">搜索</button>
                 </div>
             </form>
             
@@ -66,6 +101,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
     
     <!-- 景点列表 - 卡片式布局 -->
     {% if attractions %}
@@ -95,7 +131,7 @@
                         <p class="card-text text-muted flex-grow-1">{{ item.description|truncatechars:80 }}</p>
                         <div class="mt-auto">
                             <a href="{% url 'attractionsApp:attraction_detail' item.id %}" 
-                               class="btn btn-primary w-100">查看详情</a>
+                               class="btn btn-primary attraction-detail-btn w-100">查看详情</a>
                         </div>
                     </div>
                 </div>

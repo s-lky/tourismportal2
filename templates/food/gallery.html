@@ -4,6 +4,15 @@
 
 {% block extra_css %}
 <style>
+    /* 全屏背景 */
+    body {
+        background: linear-gradient(135deg, #a5aabf 0%, #b3acbb 100%);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
+    
     /* 瀑布流容器 */
     .masonry-container {
         column-count: 4;
@@ -117,10 +126,9 @@
     .page-header {
         text-align: center;
         padding: 3rem 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: transparent;
         color: white;
         margin-bottom: 2rem;
-        border-radius: 0 0 30px 30px;
     }
 
     .page-header h1 {
@@ -171,32 +179,34 @@
 <div class="container">
     {% if foods %}
         <!-- 瀑布流展示 -->
-        <div class="masonry-container">
+        <div class="masonry-container" style="position: relative; z-index: 1;">
             {% for food in foods %}
-            <div class="food-item">
-                <div class="food-image-wrapper">
-                    {% if food.image %}
-                        <img src="{{ food.image.url }}" alt="{{ food.name }}" loading="lazy">
-                    {% else %}
-                        <div style="height: 250px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
-                            <span class="text-muted">暂无图片</span>
-                        </div>
-                    {% endif %}
-                    
-                    <!-- 悬停遮罩层 - 显示名称和推荐指数 -->
-                    <div class="food-overlay">
-                        <div class="food-info">
-                            <div class="food-name">{{ food.name }}</div>
-                            <div class="food-rating">{{ food.get_rating_display }}</div>
-                            {% if food.description %}
-                                <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.9;">
-                                    {{ food.description|truncatechars:50 }}
-                                </div>
-                            {% endif %}
+            <a href="{% url 'foodApp:food_detail' food.id %}" style="text-decoration: none; color: inherit;">
+                <div class="food-item">
+                    <div class="food-image-wrapper">
+                        {% if food.image %}
+                            <img src="{{ food.image.url }}" alt="{{ food.name }}" loading="lazy">
+                        {% else %}
+                            <div style="height: 250px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                <span class="text-muted">暂无图片</span>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- 悬停遮罩层 - 显示名称和推荐指数 -->
+                        <div class="food-overlay">
+                            <div class="food-info">
+                                <div class="food-name">{{ food.name }}</div>
+                                <div class="food-rating">{{ food.get_rating_display }}</div>
+                                {% if food.description %}
+                                    <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.9;">
+                                        {{ food.description|truncatechars:50 }}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     {% else %}

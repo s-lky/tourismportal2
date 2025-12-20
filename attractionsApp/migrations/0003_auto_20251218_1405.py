@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='attraction',
             name='city',
-            field=models.CharField(choices=[('guangzhou', '广州'), ('shenzhen', '深圳'), ('foshan', '佛山'), ('dongguan', '东莞'), ('zhuhai', '珠海'), ('zhongshan', '中山'), ('jiangmen', '江门'), ('huizhou', '惠州'), ('zhaoqing', '肇庆'), ('shantou', '汕头'), ('chaozhou', '潮州'), ('jieyang', '揭阳'), ('shanwei', '汕尾'), ('meizhou', '梅州'), ('shaoguan', '韶关'), ('qingyuan', '清远'), ('heyuan', '河源'), ('maoming', '茂名'), ('yangjiang', '阳江'), ('yunfu', '云浮'), ('zhanjiang', '湛江')], default='guangzhou', max_length=20, verbose_name='所属城市'),
+            field=models.CharField(choices=[('guangzhou', '广州'), ('shenzhen', '深圳'), ('foshan', '佛山'), ('dongguan', '东莞'), ('zhuhai', '珠海'), ('zhongshan', '中山'), ('jiangmen', '江门'), ('huizhou', '惠州'), ('zhaoqing', '肇庆'), ('shantou', '汕头'), ('chaozhou', '潮州'), ('jieyang', '揭阳'), ('shanwei', '汕尾'), ('meizhou', '梅州'), ('shaoguan', '韶关'), ('qingyuan', '清远'), ('heyuan', '河源'), ('maoming', '茂名'), ('yangjiang', '阳江'), ('yunfu', '云浮'), ('zhanjiang', '湛江'),('aomeng', '澳门'),('xianggang', '香港')], default='guangzhou', max_length=20, verbose_name='所属城市'),
         ),
         migrations.AlterField(
             model_name='attraction',

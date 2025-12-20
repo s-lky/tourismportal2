@@ -2,6 +2,47 @@
 
 {% block title %}美食推荐列表 - 寻味岭南{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 美食推荐列表页按钮和卡片样式 */
+    .food-recommend-btn {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+        color: #fff !important;
+    }
+    
+    .food-recommend-btn:hover {
+        background-color: #e8921f !important;
+        border-color: #e8921f !important;
+        color: #fff !important;
+    }
+    
+    .food-recommend-btn:focus,
+    .food-recommend-btn:active {
+        background-color: #d8820d !important;
+        border-color: #d8820d !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(250, 163, 49, 0.5) !important;
+    }
+    
+    /* 统计卡片背景色 */
+    .food-stats-card-primary {
+        background-color: #FAA331 !important;
+    }
+    
+    .food-stats-card-info {
+        background-color: #FAA331 !important;
+    }
+    
+    /* 提示框样式 */
+    .food-alert-info {
+        background-color: #fff3e0 !important;
+        border-color: #FAA331 !important;
+        color: #8b4513 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <!-- 页面标题 -->
@@ -11,7 +52,7 @@
             <p class="text-muted">探索用户推荐的广东美食</p>
         </div>
         {% if user.is_authenticated %}
-        <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary">
+        <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary food-recommend-btn">
             <i class="bi bi-plus-circle"></i> 我要投稿
         </a>
         {% endif %}
@@ -21,7 +62,7 @@
     {% if total_count %}
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card text-center bg-primary text-white">
+            <div class="card text-center bg-primary food-stats-card-primary text-white">
                 <div class="card-body">
                     <h3 class="mb-0">{{ total_count }}</h3>
                     <small>总推荐数</small>
@@ -38,7 +79,7 @@
         </div>
         {% if user.is_authenticated and my_count %}
         <div class="col-md-4">
-            <div class="card text-center bg-info text-white">
+            <div class="card text-center bg-info food-stats-card-info text-white">
                 <div class="card-body">
                     <h3 class="mb-0">{{ my_count }}</h3>
                     <small>我的投稿</small>
@@ -115,13 +156,13 @@
         {% endif %}
     {% else %}
         <!-- 空状态 -->
-        <div class="alert alert-info text-center" role="alert">
+        <div class="alert alert-info food-alert-info text-center" role="alert">
             <h5>暂无推荐数据</h5>
             <p class="mb-3">还没有用户推荐美食，快来成为第一个推荐者吧！</p>
             {% if user.is_authenticated %}
-                <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary">我要投稿</a>
+                <a href="{% url 'foodApp:food_recommend' %}" class="btn btn-primary food-recommend-btn">我要投稿</a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">登录后投稿</a>
+                <a href="{% url 'login' %}" class="btn btn-primary food-recommend-btn">登录后投稿</a>
             {% endif %}
         </div>
     {% endif %}

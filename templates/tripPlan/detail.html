@@ -2,12 +2,22 @@
 
 {% block title %}{{ plan.title }} - 旅游攻略{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 攻略详情页卡片头部样式 */
+    .trip-detail-card-header {
+        background-color: #FAA331 !important;
+        border-color: #FAA331 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-10 offset-md-1">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary trip-detail-card-header text-white">
                     <h3 class="mb-0">{{ plan.title }}</h3>
                 </div>
                 <div class="card-body">

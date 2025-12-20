@@ -34,6 +34,9 @@ class Attraction(models.Model):
         ('yangjiang', '阳江'),
         ('yunfu', '云浮'),
         ('zhanjiang', '湛江'),
+        ('aomeng', '澳门'),
+        ('xianggang', '香港'),
+
     )
     
     # 定义类型选项
@@ -50,7 +53,7 @@ class Attraction(models.Model):
     description = models.TextField(verbose_name="景点介绍")
     price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="门票价格", null=True, blank=True)
     is_free = models.BooleanField(default=False, verbose_name="门票免费")
-    # 需要配置Media设置才能上传图片，后面会讲
+    
     image = models.ImageField(upload_to='attractions/', verbose_name="封面图")
     opening_hours = models.CharField(max_length=200, verbose_name="开放时间", default="09:00-18:00")
     map_image = models.ImageField(upload_to='attractions/maps/', verbose_name="地图位置图", null=True, blank=True)
@@ -93,16 +96,16 @@ class AttractionImage(models.Model):
         return f"{self.attraction.name} - 图片{self.order}"
 
 
-class AttractionLike(models.Model):
-    """景点点赞模型"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")
-    attraction = models.ForeignKey(Attraction, on_delete=models.CASCADE, related_name='likes', verbose_name="景点")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="点赞时间")
+# class AttractionLike(models.Model):
+#     """景点点赞模型"""
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")
+#     attraction = models.ForeignKey(Attraction, on_delete=models.CASCADE, related_name='likes', verbose_name="景点")
+#     created_at = models.DateTimeField(auto_now_add=True, verbose_name="点赞时间")
     
-    class Meta:
-        unique_together = ('user', 'attraction')
-        verbose_name = "点赞"
-        verbose_name_plural = "点赞"
+#     class Meta:
+#         unique_together = ('user', 'attraction')
+#         verbose_name = "点赞"
+#         verbose_name_plural = "点赞"
     
-    def __str__(self):
-        return f"{self.user.username} 点赞 {self.attraction.name}"
+#     def __str__(self):
+#         return f"{self.user.username} 点赞 {self.attraction.name}"
