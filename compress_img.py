@@ -1,12 +1,12 @@
 import os
 from PIL import Image
 
-# 设置要压缩的根目录（根据你的截图，文件夹叫 media）
+# 设置要压缩的根目录
 TARGET_DIR = './media' 
 
 # 压缩配置
-MAX_WIDTH = 1280  # 将图片宽度限制在1280px以内（网页展示足够了）
-QUALITY = 70      # 压缩质量 1-100，70是体积和画质的最佳平衡点
+MAX_WIDTH = 1280  # 图片宽度限制
+QUALITY = 70      # 压缩质量70
 
 def compress_images(directory):
     count = 0
