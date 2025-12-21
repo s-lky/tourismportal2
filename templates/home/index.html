@@ -5,8 +5,6 @@
 {% block title %}首页 - 广东旅游门户网{% endblock %}
 
 {% block extra_css %}
-<!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     body {
         background-image: linear-gradient(rgba(3, 213, 255, 0.01), rgba(14, 207, 255, 0.01)), url("{% static 'img/firestpage2.jpg' %}");
@@ -221,16 +219,16 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">出发日期</div>
-                            <input type="text" class="form-control home-search-input datepicker" id="start_date" name="start_date" placeholder="请选择出发日期" readonly>
+                            <input type="date" class="form-control home-search-input" id="start_date" name="start_date" placeholder="请选择出发日期">
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">返回日期</div>
-                            <input type="text" class="form-control home-search-input datepicker" id="end_date" name="end_date" placeholder="请选择返回日期" readonly>
+                            <input type="date" class="form-control home-search-input" id="end_date" name="end_date" placeholder="请选择返回日期">
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="home-search-label">目的地</div>
                             <!-- 这里直接复用景点列表里的 search 参数，方便后端使用 -->
-                            <input type="text" class="form-control home-search-input" name="search" placeholder="请输入目的地或景点名称">
+                            <input type="text" class="form-control home-search-input" name="search" placeholder="请输入景点名称">
                         </div>
                         <div class="col-12 col-md-3 d-grid d-md-block text-md-end">
                             <button class="btn btn-primary home-search-btn" type="submit">
@@ -375,31 +373,30 @@
     </div>
 </div>
 
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+</script> -->
 <script>
-    // 配置中文语言
-    flatpickr.localize(flatpickr.l10ns.zh);
-    
-    // 出发日期选择器
-    const startDatePicker = flatpickr("#start_date", {
-        dateFormat: "Y-m-d",
-        minDate: "today",
-        locale: "zh",
-        onChange: function(selectedDates, dateStr, instance) {
-            // 当选择出发日期后，更新返回日期的最小日期
-            if (selectedDates.length > 0) {
-                endDatePicker.set('minDate', selectedDates[0]);
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        
+        // 获取今天的日期，格式化为 YYYY-MM-DD
+        const today = new Date().toISOString().split('T')[0];
+        
+        // 设置默认最小日期为今天
+        startDateInput.setAttribute('min', today);
+        endDateInput.setAttribute('min', today);
+
+        // 当出发日期改变时
+        startDateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+            // 设置返回日期的最小值为选中的出发日期
+            endDateInput.setAttribute('min', selectedDate);
+            
+            // 如果当前已选的返回日期早于新的出发日期，则清空返回日期
+            if(endDateInput.value && endDateInput.value < selectedDate) {
+                endDateInput.value = '';
             }
-        }
-    });
-    
-    // 返回日期选择器
-    const endDatePicker = flatpickr("#end_date", {
-        dateFormat: "Y-m-d",
-        minDate: "today",
-        locale: "zh"
+        });
     });
 </script>
 {% endblock %}
