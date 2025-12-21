@@ -25,4 +25,7 @@ class Booking(models.Model):
     @property
     def total_price(self):
         """计算总价"""
-        return self.attraction.price * self.quantity
+        """ 防止空值参与运算的判断"""
+        attraction_price = self.attraction.price if self.attraction.price is not None else 0
+        quantity = self.quantity if self.quantity is not None else 0
+        return attraction_price * quantity
