@@ -1,11 +1,16 @@
 from django import forms
 from .models import TripPlan
 
+# 1. 新增：定义一个支持多选的文件上传组件类
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
 class TripPlanForm(forms.ModelForm):
     images = forms.FileField(
-        widget=forms.FileInput(attrs={
+        # 2. 修改：这里把 widget=forms.FileInput 改为 widget=MultipleFileInput
+        widget=MultipleFileInput(attrs={
             'class': 'form-control',
-            'multiple': True,
+            'multiple': True,  # 这里的 multiple 仍然需要保留给前端 HTML 用
             'accept': 'image/*'
         }),
         required=False,
@@ -15,6 +20,7 @@ class TripPlanForm(forms.ModelForm):
     
     class Meta:
         model = TripPlan
+        # 注意：这里的 'image' 是封面图（单张），上面的 'images' 是相册（多张），逻辑没问题
         fields = ['title', 'content', 'days', 'image']
         widgets = {
             'title': forms.TextInput(attrs={
@@ -48,9 +54,9 @@ class TripPlanForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         # 验证图片数量
+        # 注意：这里需要使用 self.files 来获取文件数据
         if 'images' in self.files:
             images = self.files.getlist('images')
             if len(images) > 10:
-                raise forms.ValidationError({'images': '最多只能上传10张图片，请重新选择'})
+                raise forms.ValidationError('最多只能上传10张图片，请重新选择')
         return cleaned_data
-
