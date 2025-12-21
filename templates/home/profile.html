@@ -5,11 +5,24 @@
 
 {% block extra_css %}
 <style>
+    /* 全屏背景 */
+    body {
+        background: linear-gradient(135deg, #ffda82 0%, #e8921f 100%);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
+    
     .profile-header {
-        background: linear-gradient(135deg, #e8921f 0%, #ffda82 100%);
+        background: transparent;
         color: white;
         padding: 3rem 0;
         margin-bottom: 2rem;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
     }
     .avatar-container {
         text-align: center;

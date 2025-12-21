@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 from .models import Booking
 from attractionsApp.models import Attraction
 from .forms import BookingForm
@@ -19,7 +20,7 @@ def create_booking(request, attraction_id):
             booking.user = request.user
             booking.attraction = attraction
             booking.save()
-            messages.success(request, f'预订成功！总价：￥{booking.total_price}')
+            messages.success(request, mark_safe(f'<div style="text-align: center; line-height: 1.8;"><div><strong>预订成功！</strong></div><div>总价：<span style="font-size: 1.2em; font-weight: bold;">￥{booking.total_price}</span></div></div>'))
             return redirect('bookingApp:my_bookings')
     else:
         form = BookingForm()

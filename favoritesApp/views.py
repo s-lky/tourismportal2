@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from .models import Favorite
 from attractionsApp.models import Attraction
 
@@ -15,9 +14,7 @@ def toggle_favorite(request, attraction_id):
     if not created:
         # 如果已存在，则取消收藏
         favorite.delete()
-        messages.success(request, '已取消收藏')
-    else:
-        messages.success(request, '收藏成功')
+    # 不再显示收藏成功或取消收藏的提示消息
     
     return redirect('attractionsApp:attraction_detail', attraction_id=attraction_id)
 

@@ -9,6 +9,107 @@
         background-color: #FAA331 !important;
         border-color: #FAA331 !important;
     }
+    
+    /* 轮播图样式 */
+    .trip-plan-carousel {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+    
+    .trip-plan-carousel .carousel-inner {
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+    
+    .trip-plan-carousel .carousel-item img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+    
+    .trip-plan-carousel .carousel-control-prev,
+    .trip-plan-carousel .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        opacity: 0.8;
+    }
+    
+    .trip-plan-carousel .carousel-control-prev {
+        left: 15px;
+    }
+    
+    .trip-plan-carousel .carousel-control-next {
+        right: 15px;
+    }
+    
+    .trip-plan-carousel .carousel-control-prev:hover,
+    .trip-plan-carousel .carousel-control-next:hover {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .trip-plan-carousel .carousel-indicators {
+        margin-bottom: 1rem;
+    }
+    
+    .trip-plan-carousel .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+    
+    .trip-plan-carousel .carousel-indicators button.active {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    
+    /* 图片模态框样式 */
+    .image-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        cursor: pointer;
+    }
+    
+    .image-modal-content {
+        margin: auto;
+        display: block;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 50px;
+        animation: zoom 0.3s;
+    }
+    
+    @keyframes zoom {
+        from {transform: scale(0)}
+        to {transform: scale(1)}
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .close-modal:hover {
+        color: #bbb;
+    }
 </style>
 {% endblock %}
 
@@ -21,9 +122,54 @@
                     <h3 class="mb-0">{{ plan.title }}</h3>
                 </div>
                 <div class="card-body">
-                    {% if plan.image %}
-                    <div class="mb-4 text-center">
-                        <img src="{{ plan.image.url }}" class="img-fluid rounded" alt="{{ plan.title }}" style="max-height: 500px; width: auto;">
+                    {% if plan.image or plan.images.all %}
+                    <div class="trip-plan-carousel">
+                        <div id="tripPlanCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% if plan.image %}
+                                <div class="carousel-item active">
+                                    <img src="{{ plan.image.url }}" class="d-block w-100" alt="{{ plan.title }}" onclick="openImageModal('{{ plan.image.url }}')">
+                                </div>
+                                {% endif %}
+                                {% for plan_image in plan.images.all %}
+                                <div class="carousel-item {% if not plan.image and forloop.first %}active{% endif %}">
+                                    <img src="{{ plan_image.image.url }}" class="d-block w-100" alt="{{ plan.title }} - 图片{{ forloop.counter }}" onclick="openImageModal('{{ plan_image.image.url }}')">
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if plan.image and plan.images.all|length > 0 %}
+                            {% comment %}有封面图且有额外图片，总共2+张图片{% endcomment %}
+                            <button class="carousel-control-prev" type="button" data-bs-target="#tripPlanCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">上一张</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#tripPlanCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">下一张</span>
+                            </button>
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#tripPlanCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="图片 1"></button>
+                                {% for plan_image in plan.images.all %}
+                                <button type="button" data-bs-target="#tripPlanCarousel" data-bs-slide-to="{{ forloop.counter }}" aria-label="图片 {{ forloop.counter|add:1 }}"></button>
+                                {% endfor %}
+                            </div>
+                            {% elif not plan.image and plan.images.all|length > 1 %}
+                            {% comment %}没有封面图但有多张额外图片{% endcomment %}
+                            <button class="carousel-control-prev" type="button" data-bs-target="#tripPlanCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">上一张</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#tripPlanCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">下一张</span>
+                            </button>
+                            <div class="carousel-indicators">
+                                {% for plan_image in plan.images.all %}
+                                <button type="button" data-bs-target="#tripPlanCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="图片 {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endif %}
                     
@@ -56,5 +202,31 @@
         </div>
     </div>
 </div>
+
+<!-- 图片模态框 -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <span class="close-modal">&times;</span>
+    <img class="image-modal-content" id="modalImage">
+</div>
+
+<script>
+function openImageModal(imageUrl) {
+    var modal = document.getElementById('imageModal');
+    var modalImg = document.getElementById('modalImage');
+    modal.style.display = 'block';
+    modalImg.src = imageUrl;
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+// 按ESC键关闭模态框
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
 {% endblock %}
 

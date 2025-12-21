@@ -79,6 +79,16 @@
                             <small class="text-muted">上传攻略封面图片（可选）</small>
                         </div>
                         
+                        <div class="mb-3">
+                            <label for="{{ form.images.id_for_label }}" class="form-label">{{ form.images.label }}</label>
+                            {{ form.images }}
+                            {% if form.images.errors %}
+                                <div class="text-danger small">{{ form.images.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">{{ form.images.help_text }}</small>
+                            <div id="image-count" class="text-muted small mt-1"></div>
+                        </div>
+                        
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg trip-create-btn">发布攻略</button>
                             <a href="{% url 'tripPlanApp:trip_plan_list' %}" class="btn btn-outline-secondary">取消</a>

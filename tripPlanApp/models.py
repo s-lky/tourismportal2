@@ -18,3 +18,19 @@ class TripPlan(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class TripPlanImage(models.Model):
+    """旅游攻略图片模型 - 支持多图显示"""
+    trip_plan = models.ForeignKey(TripPlan, on_delete=models.CASCADE, related_name='images', verbose_name="旅游攻略")
+    image = models.ImageField(upload_to='tripPlans/gallery/', verbose_name="图片")
+    order = models.PositiveIntegerField(default=0, verbose_name="排序")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    
+    class Meta:
+        ordering = ['order', 'created_at']
+        verbose_name = "攻略图片"
+        verbose_name_plural = "攻略图片"
+    
+    def __str__(self):
+        return f"{self.trip_plan.title} - 图片{self.order}"

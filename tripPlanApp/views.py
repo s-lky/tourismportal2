@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import TripPlan
+from .models import TripPlan, TripPlanImage
 from .forms import TripPlanForm
 
 # Create your views here.
@@ -25,7 +25,20 @@ def create_trip_plan(request):
             plan = form.save(commit=False)
             plan.user = request.user
             plan.save()
-            messages.success(request, '攻略发布成功！')
+            
+            # 保存图片（表单验证已确保不超过10张）
+            images = request.FILES.getlist('images')
+            for index, image in enumerate(images):
+                TripPlanImage.objects.create(
+                    trip_plan=plan,
+                    image=image,
+                    order=index
+                )
+            
+            if images:
+                messages.success(request, f'攻略发布成功！已上传{len(images)}张图片')
+            else:
+                messages.success(request, '攻略发布成功！')
             return redirect('tripPlanApp:trip_plan_detail', plan_id=plan.id)
     else:
         form = TripPlanForm()
